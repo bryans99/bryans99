@@ -85,7 +85,6 @@ import { ILook } from '@looker/sdk/dist/sdk/4.0/models'
     componentHeading('Field Text')
     const stateCtr = _factory.createContainer('row')
     const hideCheckbox = stateCtr.createFieldCheckbox('Hide', 'right')
-    const disableCheckbox = stateCtr.createFieldCheckbox('Disable', 'right')
     const readonlyCheckbox = stateCtr.createFieldCheckbox('Readonly', 'right')
     const requiredCheckbox = stateCtr.createFieldCheckbox('Required ', 'right')
     const fieldText = ctr.createFieldText('Field text', 'left')
@@ -94,6 +93,15 @@ import { ILook } from '@looker/sdk/dist/sdk/4.0/models'
     fieldTextValue.bind(fieldText)
     fieldTextValue.width = '400px'
     fieldTextValue.readonly = true
+    hideCheckbox.onChange((value: boolean) => {
+      fieldText.hidden = value
+    })
+    readonlyCheckbox.onChange((value: boolean) => {
+      fieldText.readonly = value
+    })
+    requiredCheckbox.onChange((value: boolean) => {
+      fieldText.required = value
+    })
   }
 
   // const onSidebarSelect = (itemId: string) => {
