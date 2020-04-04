@@ -74,7 +74,7 @@ import { ILook } from '@looker/sdk/dist/sdk/4.0/models'
       componentStateDemoCtr.id,
       bannerDemoCtr.id
     ]
-    const selectItem = validItems.find(item => item.id === initialItem) || validItems[0]
+    const selectItem = validItems.find(item => item === initialItem) || validItems[0]
     _sidebar.select(selectItem)
     // factory.createContainer('column').props = { height: '100vh' }
     // factory.createHeading("Welcome to the Looker Extension Template")
