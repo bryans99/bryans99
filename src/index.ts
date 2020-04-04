@@ -23,6 +23,7 @@
  */
 
 import {
+  CardContainerBuilder,
   connectExtensionHost,
   ConnectedExtension,
   ExtensionSDK,
@@ -37,29 +38,44 @@ import { ILook } from '@looker/sdk/dist/sdk/4.0/models'
 (function() {
   let _factory: UiBuilderFactory
   let _extensionSdk: ExtensionSDK
-  let _currentRoute: string
   let _sidebar: SidebarBuilder
-  // let _banner: BannerBuilder
+  let _cardContainer: CardContainerBuilder
+  // let _banner: BannerBuild er
   // let _table: TableBuilder
   // let _currentLookId: number
   // let _looks: ILook[]
 
   connectExtensionHost().then((connectedExtension: ConnectedExtension) => {
     const { initialRoute, extensionSdk, uiBuilderFactory } = connectedExtension
+    if (!uiBuilderFactory) {
+      const message = 'UI builder factory not initialized. Check the application definition in the manifest to ensure use_extension_ui is set to yes.'
+      console.error(message)
+      throw new Error(message)
+    }
     _extensionSdk = extensionSdk
     _factory = uiBuilderFactory as UiBuilderFactory
-    _currentRoute = initialRoute || ''
-    app()
+    app(initialRoute ? initialRoute.substring(1) : '')
   })
 
-  const app = () => {
+  const app = (initialItem: string) => {
     _factory.createHeading('UI Components Demo')
     _factory.createContainer('row')
     _sidebar = _factory.createSidebar()
+    _sidebar.props = { minWidth : '225px' }
+    _sidebar.onSelect(onSidebarItemSelect)
+    _cardContainer = _factory.createCardContainer()
+    const componentStateDemoCtr = componentStateDemo(_cardContainer)
+    const bannerDemoCtr = bannerDemo(_cardContainer)
     _sidebar.items = [
-      { icon: 'Flag', label: 'Component state'}
+      { icon: 'Flag', label: 'Component state demo', id: componentStateDemoCtr.id},
+      { icon: 'Flag', label: 'Banner demo', id: bannerDemoCtr.id}
     ]
-    fieldTextDemo()
+    const validItems = [
+      componentStateDemoCtr.id,
+      bannerDemoCtr.id
+    ]
+    const selectItem = validItems.find(item => item.id === initialItem) || validItems[0]
+    _sidebar.select(selectItem)
     // factory.createContainer('column').props = { height: '100vh' }
     // factory.createHeading("Welcome to the Looker Extension Template")
     // _banner = factory.createBanner()
@@ -80,16 +96,17 @@ import { ILook } from '@looker/sdk/dist/sdk/4.0/models'
     heading.props = { my: 'small' }
   }
 
-  const fieldTextDemo = () => {
-    const ctr = _factory.createContainer('column')
-    componentHeading('Field Text')
-    const stateCtr = _factory.createContainer('row')
-    const hideCheckbox = stateCtr.createFieldCheckbox('Hide', 'right')
-    const readonlyCheckbox = stateCtr.createFieldCheckbox('Readonly', 'right')
-    const requiredCheckbox = stateCtr.createFieldCheckbox('Required ', 'right')
-    const fieldText = ctr.createFieldText('Field text', 'left')
+  const componentStateDemo = (cardContainer: CardContainerBuilder) => {
+    const demoCtr = cardContainer.createContainer('column')
+    demoCtr.id = 'comp_state_demo'
+    componentHeading('Component state demo')
+    const ctr = _factory.createContainer('row')
+    const hideCheckbox = ctr.createFieldCheckbox('Hide', 'right')
+    const readonlyCheckbox = ctr.createFieldCheckbox('Readonly', 'right')
+    const requiredCheckbox = ctr.createFieldCheckbox('Required ', 'right')
+    const fieldText = demoCtr.createFieldText('Field text', 'left')
     fieldText.width = '400px'
-    const fieldTextValue = ctr.createFieldText('Field text value', 'left')
+    const fieldTextValue = demoCtr  .createFieldText('Field text value', 'left')
     fieldTextValue.bind(fieldText)
     fieldTextValue.width = '400px'
     fieldTextValue.readonly = true
@@ -102,15 +119,21 @@ import { ILook } from '@looker/sdk/dist/sdk/4.0/models'
     requiredCheckbox.onChange((value: boolean) => {
       fieldText.required = value
     })
+    return demoCtr
   }
 
-  // const onSidebarSelect = (itemId: string) => {
-  //   if (_looks.find(look => look.id === Number(itemId))) {
-  //     runLook(Number(itemId))
-  //   } else {
-  //     _banner.error = "Could not find requested look"
-  //   }
-  // }
+  const bannerDemo = (cardContainer: CardContainerBuilder) => {
+    const demoCtr = cardContainer.createContainer('column')
+    demoCtr.id = 'banner_demo'
+    componentHeading('Banner demo')
+    const ctr = _factory.createContainer('row')
+    return demoCtr
+  }
+
+  const onSidebarItemSelect = (itemId: string) => {
+    _cardContainer.active = itemId
+    _extensionSdk.clientRouteChanged('/' + itemId)
+  }
 
   // const getLooks = async () => {
   //   try {
