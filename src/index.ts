@@ -27,18 +27,16 @@ import {
   CardContainerBuilder,
   connectExtensionHost,
   ConnectedExtension,
+  ContainerBuilder,
   ExtensionSDK,
   UiBuilderFactory,
   BannerBuilder,
-  SidebarBuilder,
   UiBuilder,
 } from '@looker/extension-sdk'
 
 (function () {
   let _factory: UiBuilderFactory
   let _extensionSdk: ExtensionSDK
-  let _sidebar: SidebarBuilder
-  let _cardContainer: CardContainerBuilder
 
   connectExtensionHost().then((connectedExtension: ConnectedExtension) => {
     const { initialRoute, extensionSdk, uiBuilderFactory } = connectedExtension
@@ -54,26 +52,47 @@ import {
   })
 
   const app = (initialItem: string) => {
-    _factory.createHeading('UI Components Demo')
-    _factory.createContainer('row')
-    _sidebar = _factory.createSidebar()
-    _sidebar.props = { minWidth: '225px' }
-    _sidebar.onSelect(onSidebarItemSelect)
-    _cardContainer = _factory.createCardContainer()
-    const componentStateDemoCtr = componentStateDemo(_cardContainer)
-    const bannerDemoCtr = bannerDemo(_cardContainer)
-    _sidebar.items = [
+    const demos = [
       {
         icon: 'Flag',
-        label: 'Component state demo',
-        id: componentStateDemoCtr.id,
+        label: 'Field text demo',
+        demoFunction: fieldTextDemo,
+        ctrId: 'field_text_demo',
+        ctrHeading: 'Field text demo',
       },
-      { icon: 'Flag', label: 'Banner demo', id: bannerDemoCtr.id },
+      {
+        icon: 'Flag',
+        label: 'Banner demo',
+        demoFunction: bannerDemo,
+        ctrId: 'banner_demo',
+        ctrHeading: 'Banner demo',
+      },
     ]
-    const validItems = [componentStateDemoCtr.id, bannerDemoCtr.id]
+
+    _factory.createHeading('UI Components Demo')
+    _factory.createContainer('row')
+    const sidebar = _factory.createSidebar()
+    sidebar.items = []
+    sidebar.props = { minWidth: '225px' }
+    sidebar.onSelect(onSidebarItemSelect)
+    const cardContainer = _factory.createCardContainer()
+    cardContainer.id = 'demoCardContainer'
+    const validItems: string[] = []
+    demos.forEach(demo => {
+      const demoCtr = cardContainer.createColumnContainer()
+      demoCtr.id = demo.ctrId
+      componentHeading(demo.ctrId)
+      demo.demoFunction(demoCtr)
+      validItems.push(demo.ctrId)
+      sidebar.items.push({
+        icon: demo.icon,
+        label: demo.label,
+        id: demo.ctrId,
+      })
+    })
     const selectItem =
       validItems.find((item) => item === initialItem) || validItems[0]
-    _sidebar.select(selectItem)
+    sidebar.select(selectItem)
     _factory.render()
   }
 
@@ -83,10 +102,7 @@ import {
     heading.props = { my: 'small' }
   }
 
-  const componentStateDemo = (cardContainer: CardContainerBuilder) => {
-    const demoCtr = cardContainer.createColumnContainer()
-    demoCtr.id = 'comp_state_demo'
-    componentHeading('Component state demo')
+  const fieldTextDemo = (demoCtr: ContainerBuilder) => {
     _factory.createRowContainer()
     const hideCheckbox = _factory.createFieldCheckbox('Hide', 'right')
     const readonlyCheckbox = _factory.createFieldCheckbox('Readonly', 'right')
@@ -107,13 +123,9 @@ import {
     requiredCheckbox.onChange((value: boolean) => {
       fieldText.required = value
     })
-    return demoCtr
   }
 
-  const bannerDemo = (cardContainer: CardContainerBuilder) => {
-    const demoCtr = cardContainer.createContainer('column')
-    demoCtr.id = 'banner_demo'
-    componentHeading('Banner demo')
+  const bannerDemo = (demoCtr: ContainerBuilder) => {
     componentHeading('Static banners', 'h4')
     const intents: BannerIntent[] = ['error', 'warning', 'info', 'confirmation']
     intents.forEach(
@@ -149,11 +161,11 @@ import {
     )
     _factory.popContainer()
     _factory.createBanner().id = 'dynamicBanner'
-    return demoCtr
   }
 
   const onSidebarItemSelect = (itemId: string) => {
-    _cardContainer.active = itemId
+    const cardContainer = _factory.findBuilderForId('demoCardContainer') as BannerBuilder
+    cardContainer.active = itemId
     _extensionSdk.clientRouteChanged('/' + itemId)
   }
 
