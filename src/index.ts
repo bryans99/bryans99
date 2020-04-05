@@ -219,6 +219,17 @@ import {
   }
 
   const buttonDemo = () => {
+    _factory.createParagraph(`
+      Click the button to update the button count.
+    `)
+    _factory
+      .createButton("Button has been pressed {{default.buttonDemo}} times!")
+      .onClick(() => {
+        const clickCount = _factory.getModelValue('default', 'buttonDemo')
+        _factory.updateModelValue('default', 'buttonDemo', clickCount + 1)
+      })
+      .id = 'buttonDemo'
+    _factory.updateModelValue('default', 'buttonDemo', 0)
   }
 
   const headingDemo = () => {
@@ -235,13 +246,13 @@ import {
 
   const textDemo = () => {
     _factory.createText(`
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
-  `)
-  _factory.createText(`
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
-  `)
-  _factory.createText("Dynamic text '{{default.textUpdater}}'")
-  _factory.createFieldText('Update text').id = 'textUpdater'
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
+    `)
+    _factory.createText(`
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
+    `)
+    _factory.createText("Dynamic text '{{default.textUpdater}}'")
+    _factory.createFieldText('Update text').id = 'textUpdater'
   }
 
   const paragraphDemo = () => {
