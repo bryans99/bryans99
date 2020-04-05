@@ -23,6 +23,7 @@
  */
 
 import {
+  BannerIntent,
   CardContainerBuilder,
   connectExtensionHost,
   ConnectedExtension,
@@ -30,25 +31,20 @@ import {
   UiBuilderFactory,
   BannerBuilder,
   SidebarBuilder,
-  TableBuilder
+  UiBuilder,
 } from '@looker/extension-sdk'
-import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
-import { ILook } from '@looker/sdk/dist/sdk/4.0/models'
 
-(function() {
+(function () {
   let _factory: UiBuilderFactory
   let _extensionSdk: ExtensionSDK
   let _sidebar: SidebarBuilder
   let _cardContainer: CardContainerBuilder
-  // let _banner: BannerBuild er
-  // let _table: TableBuilder
-  // let _currentLookId: number
-  // let _looks: ILook[]
 
   connectExtensionHost().then((connectedExtension: ConnectedExtension) => {
     const { initialRoute, extensionSdk, uiBuilderFactory } = connectedExtension
     if (!uiBuilderFactory) {
-      const message = 'UI builder factory not initialized. Check the application definition in the manifest to ensure use_extension_ui is set to yes.'
+      const message =
+        'UI builder factory not initialized. Check the application definition in the manifest to ensure use_extension_ui is set to yes.'
       console.error(message)
       throw new Error(message)
     }
@@ -61,52 +57,44 @@ import { ILook } from '@looker/sdk/dist/sdk/4.0/models'
     _factory.createHeading('UI Components Demo')
     _factory.createContainer('row')
     _sidebar = _factory.createSidebar()
-    _sidebar.props = { minWidth : '225px' }
+    _sidebar.props = { minWidth: '225px' }
     _sidebar.onSelect(onSidebarItemSelect)
     _cardContainer = _factory.createCardContainer()
     const componentStateDemoCtr = componentStateDemo(_cardContainer)
     const bannerDemoCtr = bannerDemo(_cardContainer)
     _sidebar.items = [
-      { icon: 'Flag', label: 'Component state demo', id: componentStateDemoCtr.id},
-      { icon: 'Flag', label: 'Banner demo', id: bannerDemoCtr.id}
+      {
+        icon: 'Flag',
+        label: 'Component state demo',
+        id: componentStateDemoCtr.id,
+      },
+      { icon: 'Flag', label: 'Banner demo', id: bannerDemoCtr.id },
     ]
-    const validItems = [
-      componentStateDemoCtr.id,
-      bannerDemoCtr.id
-    ]
-    const selectItem = validItems.find(item => item === initialItem) || validItems[0]
+    const validItems = [componentStateDemoCtr.id, bannerDemoCtr.id]
+    const selectItem =
+      validItems.find((item) => item === initialItem) || validItems[0]
     _sidebar.select(selectItem)
-    // factory.createContainer('column').props = { height: '100vh' }
-    // factory.createHeading("Welcome to the Looker Extension Template")
-    // _banner = factory.createBanner()
-    // factory.createContainer('row')
-    // _sidebar.onSelect(onSidebarSelect)
-    // _sidebar.headingIcon = "Flag"
-    // _sidebar.headingLabel = "Available Looks"
-    // _sidebar.props = { width: '200px' }
-    // factory.createContainer().props = { overflow: 'scroll' }
-    // _table = factory.createTable()
     _factory.render()
-    // getLooks()
   }
 
-  const componentHeading = (label: string) => {
+  const componentHeading = (label: string, as: string = 'h3') => {
     const heading = _factory.createHeading(label)
-    heading.as = 'h3'
+    heading.as = as
     heading.props = { my: 'small' }
   }
 
   const componentStateDemo = (cardContainer: CardContainerBuilder) => {
-    const demoCtr = cardContainer.createContainer('column')
+    const demoCtr = cardContainer.createColumnContainer()
     demoCtr.id = 'comp_state_demo'
     componentHeading('Component state demo')
-    const ctr = _factory.createContainer('row')
-    const hideCheckbox = ctr.createFieldCheckbox('Hide', 'right')
-    const readonlyCheckbox = ctr.createFieldCheckbox('Readonly', 'right')
-    const requiredCheckbox = ctr.createFieldCheckbox('Required ', 'right')
-    const fieldText = demoCtr.createFieldText('Field text', 'left')
+    _factory.createRowContainer()
+    const hideCheckbox = _factory.createFieldCheckbox('Hide', 'right')
+    const readonlyCheckbox = _factory.createFieldCheckbox('Readonly', 'right')
+    const requiredCheckbox = _factory.createFieldCheckbox('Required ', 'right')
+    _factory.popContainer()
+    const fieldText = _factory.createFieldText('Field text', 'left')
     fieldText.width = '400px'
-    const fieldTextValue = demoCtr  .createFieldText('Field text value', 'left')
+    const fieldTextValue = _factory.createFieldText('Field text value', 'left')
     fieldTextValue.bind(fieldText)
     fieldTextValue.width = '400px'
     fieldTextValue.readonly = true
@@ -126,7 +114,41 @@ import { ILook } from '@looker/sdk/dist/sdk/4.0/models'
     const demoCtr = cardContainer.createContainer('column')
     demoCtr.id = 'banner_demo'
     componentHeading('Banner demo')
-    const ctr = _factory.createContainer('row')
+    componentHeading('Static banners', 'h4')
+    const intents: BannerIntent[] = ['error', 'warning', 'info', 'confirmation']
+    intents.forEach(
+      (intent: BannerIntent) => {
+        const banner = _factory.createBanner()
+        banner.text = `Static ${intent}`
+        banner.intent = intent
+      }
+    )
+    componentHeading('Dynamic banner', 'h4')
+    _factory.createRowContainer()
+    const updateDynamicBanner = (radioId: string, builder: UiBuilder) => {
+      if (radioId === builder.id) {
+        const banner = _factory.findBuilderForId('dynamicBanner') as BannerBuilder
+        if (banner) {
+          if (radioId === 'none') {
+            banner.clearMessage()
+          } else  {
+            banner[radioId] = `Display an ${radioId} message`
+          }
+        }
+      }
+    }
+    _factory.createFieldRadio('bannerType', 'None')
+      .onChange(updateDynamicBanner)
+      .id = 'none'
+    intents.forEach(
+      (intent: BannerIntent) => {
+        _factory.createFieldRadio('bannerType', intent.charAt(0).toUpperCase() + intent.substring(1))
+          .onChange(updateDynamicBanner)
+          .id = intent
+      }
+    )
+    _factory.popContainer()
+    _factory.createBanner().id = 'dynamicBanner'
     return demoCtr
   }
 
@@ -135,42 +157,4 @@ import { ILook } from '@looker/sdk/dist/sdk/4.0/models'
     _extensionSdk.clientRouteChanged('/' + itemId)
   }
 
-  // const getLooks = async () => {
-  //   try {
-  //     _banner.clearMessage()
-  //     _looks = await _core40SDK.ok(_core40SDK.all_looks())
-  //     _sidebar.value = _looks.map((look) => ({id: look.id, label: look.title, icon: 'Folder'}))
-  //     if (_looks.length === 0) {
-  //       _table.value = []
-  //       _banner.error = "No looks available"
-  //     } else {
-  //       if (_looks.find(look => look.id === _currentLookId)) {
-  //         runLook(_currentLookId)
-  //         _sidebar.select(_currentLookId)
-  //       } else {
-  //         if (_looks[0].id) {
-  //           runLook(_looks[0].id)
-  //           _sidebar.select(_looks[0].id)
-  //         } else {
-  //           _table.value = []
-  //         }
-  //       }
-  //     }
-  //   }
-  //   catch(err) {
-  //     _banner.error = "A problem occured reading all looks"
-  //   }
-  // }
-
-  // const runLook = async (lookId: number) => {
-  //   try {
-  //     _banner.clearMessage()
-  //     _extensionSdk.clientRouteChanged('/' + lookId)
-  //     const result = await _core40SDK.ok(_core40SDK.run_look({look_id: lookId, result_format: 'json'}))
-  //     _table.value = result
-  //   }
-  //   catch(err) {
-  //     _banner.error = "A problem occured reading look " + lookId
-  //   }
-  // }
 })()
