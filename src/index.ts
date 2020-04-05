@@ -24,10 +24,8 @@
 
 import {
   BannerIntent,
-  CardContainerBuilder,
   connectExtensionHost,
   ConnectedExtension,
-  ContainerBuilder,
   ExtensionSDK,
   UiBuilderFactory,
   BannerBuilder,
@@ -58,14 +56,60 @@ import {
         label: 'Field text demo',
         demoFunction: fieldTextDemo,
         ctrId: 'field_text_demo',
-        ctrHeading: 'Field text demo',
+      },
+      {
+        icon: 'Flag',
+        label: 'Field checkbox demo',
+        demoFunction: fieldCheckboxDemo,
+        ctrId: 'field_checkbox_demo',
+      },
+      {
+        icon: 'Flag',
+        label: 'Field radio demo',
+        demoFunction: fieldRadioDemo,
+        ctrId: 'field_radio_demo',
       },
       {
         icon: 'Flag',
         label: 'Banner demo',
         demoFunction: bannerDemo,
         ctrId: 'banner_demo',
-        ctrHeading: 'Banner demo',
+      },
+      {
+        icon: 'Flag',
+        label: 'Heading demo',
+        demoFunction: headingDemo,
+        ctrId: 'heading_demo',
+      },
+      {
+        icon: 'Flag',
+        label: 'Text demo',
+        demoFunction: textDemo,
+        ctrId: 'text_demo',
+      },
+      {
+        icon: 'Flag',
+        label: 'Paragraph demo',
+        demoFunction: paragraphDemo,
+        ctrId: 'paragraph_demo',
+      },
+      {
+        icon: 'Flag',
+        label: 'Markdown demo',
+        demoFunction: markdownDemo,
+        ctrId: 'markdown_demo',
+      },
+      {
+        icon: 'Flag',
+        label: 'Card demo',
+        demoFunction: cardDemo,
+        ctrId: 'card_demo',
+      },
+      {
+        icon: 'Flag',
+        label: 'Table demo',
+        demoFunction: tableDemo,
+        ctrId: 'table _demo',
       },
     ]
 
@@ -81,8 +125,8 @@ import {
     demos.forEach(demo => {
       const demoCtr = cardContainer.createColumnContainer()
       demoCtr.id = demo.ctrId
-      componentHeading(demo.ctrId)
-      demo.demoFunction(demoCtr)
+      componentHeading(demo.label)
+      demo.demoFunction()
       validItems.push(demo.ctrId)
       sidebar.items.push({
         icon: demo.icon,
@@ -102,7 +146,7 @@ import {
     heading.props = { my: 'small' }
   }
 
-  const fieldTextDemo = (demoCtr: ContainerBuilder) => {
+  const fieldTextDemo = () => {
     _factory.createRowContainer()
     const hideCheckbox = _factory.createFieldCheckbox('Hide', 'right')
     const readonlyCheckbox = _factory.createFieldCheckbox('Readonly', 'right')
@@ -125,7 +169,7 @@ import {
     })
   }
 
-  const bannerDemo = (demoCtr: ContainerBuilder) => {
+  const bannerDemo = () => {
     componentHeading('Static banners', 'h4')
     const intents: BannerIntent[] = ['error', 'warning', 'info', 'confirmation']
     intents.forEach(
@@ -161,6 +205,30 @@ import {
     )
     _factory.popContainer()
     _factory.createBanner().id = 'dynamicBanner'
+  }
+
+  const fieldCheckboxDemo = () => {
+  }
+
+  const fieldRadioDemo = () => {
+  }
+
+  const headingDemo = () => {
+  }
+
+  const textDemo = () => {
+  }
+
+  const paragraphDemo = () => {
+  }
+
+  const markdownDemo = () => {
+  }
+
+  const cardDemo = () => {
+  }
+
+  const tableDemo = () => {
   }
 
   const onSidebarItemSelect = (itemId: string) => {
