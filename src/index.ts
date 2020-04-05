@@ -230,7 +230,7 @@ import {
     componentHeading("H5 Heading", "h5")
     componentHeading("H6 Heading", "h6")
     componentHeading("Dynamic Heading '{{default.headingUpdater}}'")
-    _factory.createFieldText('Update heading').path = 'headingUpdater'
+    _factory.createFieldText('Update heading').id = 'headingUpdater'
   }
 
   const textDemo = () => {
@@ -257,6 +257,8 @@ import {
     Aenean pulvinar eget turpis quis bibendum. Nam pulvinar dolor non elit
     molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
   `)
+  _factory.createParagraph("Dynamic paragraph '{{default.paragraphUpdater}}'")
+  _factory.createFieldText('Update heading').id = 'paragraphUpdater'
 }
 
   const markdownDemo = () => {
