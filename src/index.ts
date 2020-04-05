@@ -71,6 +71,12 @@ import {
       },
       {
         icon: 'Flag',
+        label: 'Button demo',
+        demoFunction: buttonDemo,
+        ctrId: 'button_demo',
+      },
+      {
+        icon: 'Flag',
         label: 'Banner demo',
         demoFunction: bannerDemo,
         ctrId: 'banner_demo',
@@ -152,11 +158,11 @@ import {
     const readonlyCheckbox = _factory.createFieldCheckbox('Readonly', 'right')
     const requiredCheckbox = _factory.createFieldCheckbox('Required ', 'right')
     _factory.popContainer()
-    const fieldText = _factory.createFieldText('Field text', 'left')
-    fieldText.width = '400px'
-    const fieldTextValue = _factory.createFieldText('Field text value', 'left')
+    const fieldText = _factory.createFieldText('Field text')
+    fieldText.width = '100%'
+    const fieldTextValue = _factory.createFieldText('Field text value')
     fieldTextValue.bind(fieldText)
-    fieldTextValue.width = '400px'
+    fieldTextValue.width = '100%'
     fieldTextValue.readonly = true
     hideCheckbox.onChange((value: boolean) => {
       fieldText.hidden = value
@@ -213,7 +219,19 @@ import {
   const fieldRadioDemo = () => {
   }
 
+  const buttonDemo = () => {
+  }
+
   const headingDemo = () => {
+    componentHeading("Default Heading", "")
+    componentHeading("H1 Heading", "h1")
+    componentHeading("H2 Heading", "h2")
+    componentHeading("H3 Heading", "h3")
+    componentHeading("H4 Heading", "h4")
+    componentHeading("H5 Heading", "h5")
+    componentHeading("H6 Heading", "h6")
+    componentHeading("Dynamic Heading '{{default.headingUpdater}}'")
+    _factory.createFieldText('Update heading').path = 'headingUpdater'
   }
 
   const textDemo = () => {
