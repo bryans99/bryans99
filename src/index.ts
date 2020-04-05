@@ -234,6 +234,14 @@ import {
   }
 
   const textDemo = () => {
+    _factory.createText(`
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
+  `)
+  _factory.createText(`
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
+  `)
+  _factory.createText("Dynamic text '{{default.textUpdater}}'")
+  _factory.createFieldText('Update text').id = 'textUpdater'
   }
 
   const paragraphDemo = () => {
@@ -258,11 +266,37 @@ import {
     molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
   `)
   _factory.createParagraph("Dynamic paragraph '{{default.paragraphUpdater}}'")
-  _factory.createFieldText('Update heading').id = 'paragraphUpdater'
+  _factory.createFieldText('Update paragraph').id = 'paragraphUpdater'
 }
 
   const markdownDemo = () => {
-  }
+    _factory.createMarkdown(`
+# Markdown demo
+
+## Markdown Paragraph
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
+Proin cursus magna urna, vel pulvinar elit ornare eu. Pellentesque habitant morbi
+tristique senectus et netus et malesuada fames ac turpis egestas. Quisque risus ante,
+congue et metus ac, euismod ullamcorper purus. Nulla varius nec justo id dictum.
+Nulla facilisi. Integer viverra mattis orci. Aenean nec felis non sem porttitor
+volutpat. Pellentesque vestibulum ex quis quam gravida, id pharetra turpis vulputate.
+Aenean pulvinar eget turpis quis bibendum. Nam pulvinar dolor non elit
+molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
+
+## Shopping list for a heart attack special
+
+- Eggs
+- Bacon
+- Black pudding
+- Mushrooms
+- Fried bread
+- Bake beans
+
+[Find out more](http://google.com/?q=full+monty+english+breakfast)
+    `)
+    _factory.createMarkdown("Dynamic markdown '{{default.markdownUpdater}}'")
+    _factory.createFieldText('Update markdown').id = 'markdownUpdater'
+    }
 
   const cardDemo = () => {
   }
