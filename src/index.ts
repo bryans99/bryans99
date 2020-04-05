@@ -299,7 +299,18 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
     }
 
   const cardDemo = () => {
-  }
+    _factory.createCard().heading = "Card heading"
+    _factory.createParagraph(`
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
+Proin cursus magna urna, vel pulvinar elit ornare eu. Pellentesque habitant morbi
+tristique senectus et netus et malesuada fames ac turpis egestas. Quisque risus ante,
+congue et metus ac, euismod ullamcorper purus. Nulla varius nec justo id dictum.
+Nulla facilisi. Integer viverra mattis orci. Aenean nec felis non sem porttitor
+volutpat. Pellentesque vestibulum ex quis quam gravida, id pharetra turpis vulputate.
+Aenean pulvinar eget turpis quis bibendum. Nam pulvinar dolor non elit
+molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
+      `)
+    }
 
   const tableDemo = () => {
   }
