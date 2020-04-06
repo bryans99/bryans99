@@ -191,7 +191,7 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
     _factory.createRowContainer()
     const updateDynamicBanner = (radioId: string, builder: UiBuilder) => {
       if (radioId === builder.id) {
-        const banner = _factory.findBuilderForId('dynamicBanner') as BannerBuilder
+        const banner = _factory.getBuilder('dynamicBanner') as BannerBuilder
         if (banner) {
           if (radioId === 'none') {
             banner.clearMessage()
@@ -344,7 +344,7 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
     }
 
   const onSidebarItemSelect = (itemId: string) => {
-    const cardContainer = _factory.findBuilderForId('demoCardContainer') as BannerBuilder
+    const cardContainer = _factory.getBuilder('demoCardContainer') as BannerBuilder
     cardContainer.active = itemId
     _extensionSdk.clientRouteChanged('/' + itemId)
   }
