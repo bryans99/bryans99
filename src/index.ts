@@ -31,13 +31,15 @@ import {
   BannerBuilder,
   UiBuilder,
 } from '@looker/extension-sdk'
+import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
 
 (function () {
   let _factory: UiBuilderFactory
   let _extensionSdk: ExtensionSDK
+  let _core40SDK: Looker40SDK
 
   connectExtensionHost().then((connectedExtension: ConnectedExtension) => {
-    const { initialRoute, extensionSdk, uiBuilderFactory } = connectedExtension
+    const { initialRoute, extensionSdk, uiBuilderFactory, core40SDK } = connectedExtension
     if (!uiBuilderFactory) {
       const message =
         'UI builder factory not initialized. Check the application definition in the manifest to ensure use_extension_ui is set to yes.'
@@ -46,6 +48,7 @@ import {
     }
     _extensionSdk = extensionSdk
     _factory = uiBuilderFactory as UiBuilderFactory
+    _core40SDK = core40SDK
     app(initialRoute ? initialRoute.substring(1) : '')
   })
 
@@ -119,7 +122,7 @@ import {
       },
     ]
 
-    _factory.createHeading('UI Components Demo')
+    _factory.createHeading('Simple UI Components Demo')
     _factory.createContainer('row')
     const sidebar = _factory.createSidebar()
     sidebar.items = []
@@ -324,7 +327,21 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
     }
 
   const tableDemo = () => {
-  }
+    const banner = _factory.createBanner()
+    const table = _factory.createTable()
+    table.columns = [
+      {name: "id", heading: "Look ID"},
+      {name: "title", heading: "Look Title"},
+    ]
+    _core40SDK.all_looks()
+      .then(result => {
+        if (result.ok) {
+          _factory.updateModelValue('default', table.id, result.value)
+        } else {
+          banner.error = "Error retrieving looks"
+        }
+      })
+    }
 
   const onSidebarItemSelect = (itemId: string) => {
     const cardContainer = _factory.findBuilderForId('demoCardContainer') as BannerBuilder
