@@ -222,7 +222,6 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
     const requiredCheckbox = _factory.createFieldCheckbox('Required ', 'right')
     _factory.popContainer()
     const field = _factory.createFieldCheckbox('Field checkbox')
-    field.width = '100%'
     const fieldTextValue = _factory.createFieldText('Field checkbox value')
     fieldTextValue.bind(field)
     fieldTextValue.width = '100%'
@@ -239,6 +238,39 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
   }
 
   const fieldRadioDemo = () => {
+    _factory.createRowContainer()
+    const hideCheckbox = _factory.createFieldCheckbox('Hide', 'right')
+    const readonlyCheckbox = _factory.createFieldCheckbox('Readonly (not working, bug in lens)', 'right')
+    const requiredCheckbox = _factory.createFieldCheckbox('Required ', 'right')
+    _factory.popContainer()
+    _factory.createRowContainer()
+    const radio1 = _factory.createFieldRadio('radioValue', 'Radio 1')
+    radio1.id = 'radio1'
+    const radio2 = _factory.createFieldRadio('radioValue', 'Radio 2')
+    radio2.id = 'radio2'
+    _factory.popContainer()
+    const fieldTextValue = _factory.createFieldText('Field checkbox value')
+    const updateValue = (radioId: string, builder: UiBuilder) => {
+      if (radioId === builder.id) {
+        fieldTextValue.value = radioId
+      }
+    }
+    radio1.onChange(updateValue)
+    radio2.onChange(updateValue)
+    fieldTextValue.width = '100%'
+    fieldTextValue.readonly = true
+    hideCheckbox.onChange((value: boolean) => {
+      radio1.hidden = value
+      radio2.hidden = value
+    })
+    readonlyCheckbox.onChange((value: boolean) => {
+      radio1.readonly = value
+      radio2.readonly = value
+    })
+    requiredCheckbox.onChange((value: boolean) => {
+      radio1.required = value
+      radio2.required = value
+    })
   }
 
   const buttonDemo = () => {
