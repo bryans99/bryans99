@@ -216,6 +216,26 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
   }
 
   const fieldCheckboxDemo = () => {
+    _factory.createRowContainer()
+    const hideCheckbox = _factory.createFieldCheckbox('Hide', 'right')
+    const readonlyCheckbox = _factory.createFieldCheckbox('Readonly (not working, bug in lens)', 'right')
+    const requiredCheckbox = _factory.createFieldCheckbox('Required ', 'right')
+    _factory.popContainer()
+    const field = _factory.createFieldCheckbox('Field checkbox')
+    field.width = '100%'
+    const fieldTextValue = _factory.createFieldText('Field checkbox value')
+    fieldTextValue.bind(field)
+    fieldTextValue.width = '100%'
+    fieldTextValue.readonly = true
+    hideCheckbox.onChange((value: boolean) => {
+      field.hidden = value
+    })
+    readonlyCheckbox.onChange((value: boolean) => {
+      field.readonly = value
+    })
+    requiredCheckbox.onChange((value: boolean) => {
+      field.required = value
+    })
   }
 
   const fieldRadioDemo = () => {
