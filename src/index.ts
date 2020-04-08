@@ -291,6 +291,8 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
       })
     button.id = 'buttonDemo'
     _factory.updateModelValue('default', 'buttonDemo', 0)
+    _factory.createButton("Transparent button", "transparent")
+    _factory.createButton("Outline button", "outline")
     hideCheckbox.onChange((value: boolean) => {
       button.hidden = value
     })
