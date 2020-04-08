@@ -29,6 +29,7 @@ import {
   ExtensionSDK,
   UiBuilderFactory,
   BannerBuilder,
+  ButtonBuilder,
   UiBuilder,
   CardContainerBuilder,
 } from '@looker/extension-sdk'
@@ -275,17 +276,27 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
   }
 
   const buttonDemo = () => {
+    _factory.createRowContainer()
+    const hideCheckbox = _factory.createFieldCheckbox('Hide', 'right')
+    const disabledCheckbox = _factory.createFieldCheckbox('Disabled', 'right')
+    _factory.popContainer()
     _factory.createParagraph(`
       Click the button to update the button count.
     `)
-    _factory
+    const button: ButtonBuilder = _factory
       .createButton("Button has been pressed {{default.buttonDemo}} times!")
       .onClick(() => {
         const clickCount = _factory.getModelValue('default', 'buttonDemo')
         _factory.updateModelValue('default', 'buttonDemo', clickCount + 1)
       })
-      .id = 'buttonDemo'
+    button.id = 'buttonDemo'
     _factory.updateModelValue('default', 'buttonDemo', 0)
+    hideCheckbox.onChange((value: boolean) => {
+      button.hidden = value
+    })
+    disabledCheckbox.onChange((value: boolean) => {
+      button.disabled = value
+    })
   }
 
   const headingDemo = () => {
