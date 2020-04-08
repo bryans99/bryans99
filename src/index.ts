@@ -30,6 +30,7 @@ import {
   UiBuilderFactory,
   BannerBuilder,
   UiBuilder,
+  CardContainerBuilder,
 } from '@looker/extension-sdk'
 import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
 
@@ -191,12 +192,12 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
     _factory.createRowContainer()
     const updateDynamicBanner = (radioId: string, builder: UiBuilder) => {
       if (radioId === builder.id) {
-        const banner = _factory.getBuilder('dynamicBanner') as BannerBuilder
+        const banner: BannerBuilder = _factory.getBuilder('dynamicBanner') as BannerBuilder
         if (banner) {
           if (radioId === 'none') {
             banner.clearMessage()
           } else  {
-            banner[radioId] = `Display an ${radioId} message`
+            (banner as any)[radioId] = `Display an ${radioId} message`
           }
         }
       }
@@ -218,7 +219,7 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
   const fieldCheckboxDemo = () => {
     _factory.createRowContainer()
     const hideCheckbox = _factory.createFieldCheckbox('Hide', 'right')
-    const readonlyCheckbox = _factory.createFieldCheckbox('Readonly (not working, bug in lens)', 'right')
+    const readonlyCheckbox = _factory.createFieldCheckbox('Readonly', 'right')
     const requiredCheckbox = _factory.createFieldCheckbox('Required ', 'right')
     _factory.popContainer()
     const field = _factory.createFieldCheckbox('Field checkbox')
@@ -240,7 +241,7 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
   const fieldRadioDemo = () => {
     _factory.createRowContainer()
     const hideCheckbox = _factory.createFieldCheckbox('Hide', 'right')
-    const readonlyCheckbox = _factory.createFieldCheckbox('Readonly (not working, bug in lens)', 'right')
+    const readonlyCheckbox = _factory.createFieldCheckbox('Readonly', 'right')
     const requiredCheckbox = _factory.createFieldCheckbox('Required ', 'right')
     _factory.popContainer()
     _factory.createRowContainer()
@@ -396,7 +397,7 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
     }
 
   const onSidebarItemSelect = (itemId: string) => {
-    const cardContainer = _factory.getBuilder('demoCardContainer') as BannerBuilder
+    const cardContainer = _factory.getBuilder('demoCardContainer') as CardContainerBuilder
     cardContainer.active = itemId
     _extensionSdk.clientRouteChanged('/' + itemId)
   }
