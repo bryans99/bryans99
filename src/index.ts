@@ -332,9 +332,15 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
   }
 
   const textDemo = () => {
-    _factory.createText(`
+    _factory.createRowContainer()
+    const hideCheckbox = _factory.createFieldCheckbox('Hide text', 'right')
+    _factory.popContainer()
+    const comp = _factory.createText(`
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
     `)
+    hideCheckbox.onChange((value: boolean) => {
+      comp.hidden = value
+    })
     _factory.createText(`
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
     `)
@@ -343,32 +349,41 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellu
   }
 
   const paragraphDemo = () => {
+    _factory.createRowContainer()
+    const hideCheckbox = _factory.createFieldCheckbox('Hide paragraph', 'right')
+    _factory.popContainer()
+    const comp = _factory.createParagraph(`
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
+    Proin cursus magna urna, vel pulvinar elit ornare eu. Pellentesque habitant morbi
+    tristique senectus et netus et malesuada fames ac turpis egestas. Quisque risus ante,
+    congue et metus ac, euismod ullamcorper purus. Nulla varius nec justo id dictum.
+    Nulla facilisi. Integer viverra mattis orci. Aenean nec felis non sem porttitor
+    volutpat. Pellentesque vestibulum ex quis quam gravida, id pharetra turpis vulputate.
+    Aenean pulvinar eget turpis quis bibendum. Nam pulvinar dolor non elit
+    molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
+  `)
+    hideCheckbox.onChange((value: boolean) => {
+      comp.hidden = value
+    })
     _factory.createParagraph(`
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
-    Proin cursus magna urna, vel pulvinar elit ornare eu. Pellentesque habitant morbi
-    tristique senectus et netus et malesuada fames ac turpis egestas. Quisque risus ante,
-    congue et metus ac, euismod ullamcorper purus. Nulla varius nec justo id dictum.
-    Nulla facilisi. Integer viverra mattis orci. Aenean nec felis non sem porttitor
-    volutpat. Pellentesque vestibulum ex quis quam gravida, id pharetra turpis vulputate.
-    Aenean pulvinar eget turpis quis bibendum. Nam pulvinar dolor non elit
-    molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
-  `)
-  _factory.createParagraph(`
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
-    Proin cursus magna urna, vel pulvinar elit ornare eu. Pellentesque habitant morbi
-    tristique senectus et netus et malesuada fames ac turpis egestas. Quisque risus ante,
-    congue et metus ac, euismod ullamcorper purus. Nulla varius nec justo id dictum.
-    Nulla facilisi. Integer viverra mattis orci. Aenean nec felis non sem porttitor
-    volutpat. Pellentesque vestibulum ex quis quam gravida, id pharetra turpis vulputate.
-    Aenean pulvinar eget turpis quis bibendum. Nam pulvinar dolor non elit
-    molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
-  `)
-  _factory.createParagraph("Dynamic paragraph '{{default.paragraphUpdater}}'")
-  _factory.createFieldText('Update paragraph').id = 'paragraphUpdater'
-}
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
+      Proin cursus magna urna, vel pulvinar elit ornare eu. Pellentesque habitant morbi
+      tristique senectus et netus et malesuada fames ac turpis egestas. Quisque risus ante,
+      congue et metus ac, euismod ullamcorper purus. Nulla varius nec justo id dictum.
+      Nulla facilisi. Integer viverra mattis orci. Aenean nec felis non sem porttitor
+      volutpat. Pellentesque vestibulum ex quis quam gravida, id pharetra turpis vulputate.
+      Aenean pulvinar eget turpis quis bibendum. Nam pulvinar dolor non elit
+      molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
+    `)
+    _factory.createParagraph("Dynamic paragraph '{{default.paragraphUpdater}}'")
+    _factory.createFieldText('Update paragraph').id = 'paragraphUpdater'
+  }
 
   const markdownDemo = () => {
-    _factory.createMarkdown(`
+    _factory.createRowContainer()
+    const hideCheckbox = _factory.createFieldCheckbox('Hide markdown', 'right')
+    _factory.popContainer()
+    const comp = _factory.createMarkdown(`
 # Markdown demo
 
 ## Markdown Paragraph
@@ -392,12 +407,19 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
 
 [Find out more](http://google.com/?q=full+monty+english+breakfast)
     `)
+    hideCheckbox.onChange((value: boolean) => {
+      comp.hidden = value
+    })
     _factory.createMarkdown("Dynamic markdown '{{default.markdownUpdater}}'")
     _factory.createFieldText('Update markdown').id = 'markdownUpdater'
-    }
+  }
 
   const cardDemo = () => {
-    _factory.createCard().heading = "Card heading"
+    _factory.createRowContainer()
+    const hideCheckbox = _factory.createFieldCheckbox('Hide card', 'right')
+    _factory.popContainer()
+    const comp = _factory.createCard()
+    comp.heading = "Card heading"
     _factory.createParagraph(`
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
 Proin cursus magna urna, vel pulvinar elit ornare eu. Pellentesque habitant morbi
@@ -408,10 +430,16 @@ volutpat. Pellentesque vestibulum ex quis quam gravida, id pharetra turpis vulpu
 Aenean pulvinar eget turpis quis bibendum. Nam pulvinar dolor non elit
 molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
       `)
+      hideCheckbox.onChange((value: boolean) => {
+        comp.hidden = value
+      })
     }
 
   const tableDemo = () => {
     const banner = _factory.createBanner()
+    _factory.createRowContainer()
+    const hideCheckbox = _factory.createFieldCheckbox('Hide table', 'right')
+    _factory.popContainer()
     const table = _factory.createTable()
     table.columns = [
       {name: "id", heading: "Look ID"},
@@ -425,7 +453,10 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
           banner.error = "Error retrieving looks"
         }
       })
-    }
+    hideCheckbox.onChange((value: boolean) => {
+      table.hidden = value
+    })
+  }
 
   const onSidebarItemSelect = (itemId: string) => {
     const cardContainer = _factory.getBuilder('demoCardContainer') as CardContainerBuilder
