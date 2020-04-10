@@ -181,14 +181,25 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
 
   const bannerDemo = () => {
     componentHeading('Static banners', 'h4')
+    _factory.createRowContainer()
+    const hideCheckbox = _factory.createFieldCheckbox('Hide', 'right')
+    _factory.popContainer()
     const intents: BannerIntent[] = ['error', 'warning', 'info', 'confirmation']
     intents.forEach(
       (intent: BannerIntent) => {
         const banner = _factory.createBanner()
         banner.text = `Static ${intent}`
         banner.intent = intent
+        banner.id = `static_banner_${intent}`
       }
     )
+    hideCheckbox.onChange((value: boolean) => {
+      intents.forEach(
+        (intent: BannerIntent) => {
+          (_factory.getBuilder(`static_banner_${intent}`) as BannerBuilder).hidden = value
+        }
+      )
+    })
     componentHeading('Dynamic banner', 'h4')
     _factory.createRowContainer()
     const updateDynamicBanner = (radioId: string, builder: UiBuilder) => {
