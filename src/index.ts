@@ -154,6 +154,7 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
   const componentHeading = (label: string, as: string = 'h3') => {
     const heading = _factory.createHeading(label)
     heading.as = as
+    return heading
   }
 
   const fieldTextDemo = () => {
@@ -182,7 +183,7 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
   const bannerDemo = () => {
     componentHeading('Static banners', 'h4')
     _factory.createRowContainer()
-    const hideCheckbox = _factory.createFieldCheckbox('Hide', 'right')
+    const hideCheckbox = _factory.createFieldCheckbox('Hide static banners', 'right')
     _factory.popContainer()
     const intents: BannerIntent[] = ['error', 'warning', 'info', 'confirmation']
     intents.forEach(
@@ -313,7 +314,13 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
   }
 
   const headingDemo = () => {
-    componentHeading("Default Heading", "")
+    _factory.createRowContainer()
+    const hideCheckbox = _factory.createFieldCheckbox('Hide default heading', 'right')
+    _factory.popContainer()
+    const defaultHeading = componentHeading("Default Heading", "")
+    hideCheckbox.onChange((value: boolean) => {
+      defaultHeading.hidden = value
+    })
     componentHeading("H1 Heading", "h1")
     componentHeading("H2 Heading", "h2")
     componentHeading("H3 Heading", "h3")
