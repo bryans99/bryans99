@@ -112,6 +112,12 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
       },
       {
         icon: 'Flag',
+        label: 'Divider demo',
+        demoFunction: dividerDemo,
+        ctrId: 'divider_demo',
+      },
+      {
+        icon: 'Flag',
         label: 'Card container demo',
         demoFunction: cardContainerDemo,
         ctrId: 'card_container_demo',
@@ -412,6 +418,16 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
     _factory.createFieldText('Update markdown').id = 'markdownUpdater'
   }
 
+  const dividerDemo = () => {
+    _factory.createRowContainer()
+    const hideCheckbox = _factory.createFieldCheckbox('Hide divider', 'right')
+    _factory.popContainer()
+    const comp = _factory.createDivider()
+    hideCheckbox.onChange((value: boolean) => {
+      comp.hidden = value
+    })
+  }
+
   const cardContainerDemo = () => {
     _factory.createRowContainer()
     const hideCheckbox = _factory.createFieldCheckbox('Hide card container', 'right')
@@ -450,15 +466,40 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
             _factory.updateModelValue('default', table.id, result.value)
           } else {
             banner.error = "Error retrieving looks"
+            _factory.updateModelValue('default', table.id, [])
           }
         })
       })
       .on('deactivate', () => {
-        _factory.updateModelValue('default', table.id, undefined)
+        _factory.updateModelValue('default', table.id, [])
+        _factory.updateModelValue('default', 'look_table', [])
+      })
+      .on('cell_click', (actionData: any, table: UiBuilder) => {
+        if (table.value && table.value.length > 0) {
+          const { rowIndex} = actionData
+          if (rowIndex > -1 && rowIndex < table.value.length) {
+            const lookId = table.value[rowIndex].id
+            table.highlightRows = [rowIndex]
+            _factory.updateModelValue('default', 'look_table', undefined)
+            _core40SDK.run_look({look_id: lookId, result_format: 'json'})
+              .then(result => {
+                if (result.ok) {
+                  _factory.updateModelValue('default', 'look_table', result.value)
+                } else {
+                  banner.error = `Error retrieving look ${ lookId}`
+                  _factory.updateModelValue('default', 'look_table', [])
+                }
+              })
+          }
+        }
       })
     hideCheckbox.onChange((value: boolean) => {
       table.hidden = value
     })
+    _factory.createDivider()
+    _factory.createTable()
+      .withId('look_table')
+      .withValue([])
   }
 
   const onSidebarItemSelect = (itemId: string) => {
