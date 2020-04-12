@@ -127,15 +127,15 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
     _factory.createHeading('Simple UI Components Demo')
     _factory.createContainer('row')
     const sidebar = _factory.createSidebar()
-    sidebar.items = []
-    sidebar.props = { minWidth: '225px' }
-    sidebar.onSelect(onSidebarItemSelect)
+      .withItems([])
+      .withProps({ minWidth: '225px' })
+      .onSelect(onSidebarItemSelect)
     const choiceContainer = _factory.createChoiceContainer()
-    choiceContainer.id = 'demoChoiceContainer'
+      .withId('demoChoiceContainer')
     const validItems: string[] = []
     demos.forEach(demo => {
-      const demoCtr = choiceContainer.createColumnContainer()
-      demoCtr.id = demo.ctrId
+      choiceContainer.createColumnContainer()
+        .withId(demo.ctrId)
       componentHeading(demo.label)
       demo.demoFunction()
       validItems.push(demo.ctrId)
@@ -152,9 +152,7 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
   }
 
   const componentHeading = (label: string, as: string = 'h3') => {
-    const heading = _factory.createHeading(label)
-    heading.as = as
-    return heading
+    return _factory.createHeading(label).withAs(as)
   }
 
   const fieldTextDemo = () => {
@@ -164,11 +162,11 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
     const requiredCheckbox = _factory.createFieldCheckbox('Required ', 'right')
     _factory.popContainer()
     const fieldText = _factory.createFieldText('Field text')
-    fieldText.width = '100%'
-    const fieldTextValue = _factory.createFieldText('Field text value')
-    fieldTextValue.bind(fieldText)
-    fieldTextValue.width = '100%'
-    fieldTextValue.readonly = true
+      .withWidth('100%')
+    _factory.createFieldText('Field text value')
+      .bind(fieldText)
+      .withWidth('100%')
+      .withReadonly(true)
     hideCheckbox.onChange((value: boolean) => {
       fieldText.hidden = value
     })
@@ -188,10 +186,10 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
     const intents: BannerIntent[] = ['error', 'warning', 'info', 'confirmation']
     intents.forEach(
       (intent: BannerIntent) => {
-        const banner = _factory.createBanner()
-        banner.text = `Static ${intent}`
-        banner.intent = intent
-        banner.id = `static_banner_${intent}`
+        _factory.createBanner()
+          .withText(`Static ${intent}`)
+          .withIntent(intent)
+          .withId(`static_banner_${intent}`)
       }
     )
     hideCheckbox.onChange((value: boolean) => {
@@ -217,16 +215,16 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
     }
     _factory.createFieldRadio('bannerType', 'None')
       .onChange(updateDynamicBanner)
-      .id = 'none'
+      .withId('none')
     intents.forEach(
       (intent: BannerIntent) => {
         _factory.createFieldRadio('bannerType', intent.charAt(0).toUpperCase() + intent.substring(1))
           .onChange(updateDynamicBanner)
-          .id = intent
+          .withId(intent)
       }
     )
     _factory.popContainer()
-    _factory.createBanner().id = 'dynamicBanner'
+    _factory.createBanner().withId('dynamicBanner')
   }
 
   const fieldCheckboxDemo = () => {
@@ -236,10 +234,10 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
     const requiredCheckbox = _factory.createFieldCheckbox('Required ', 'right')
     _factory.popContainer()
     const field = _factory.createFieldCheckbox('Field checkbox')
-    const fieldTextValue = _factory.createFieldText('Field checkbox value')
-    fieldTextValue.bind(field)
-    fieldTextValue.width = '100%'
-    fieldTextValue.readonly = true
+    _factory.createFieldText('Field checkbox value')
+      .bind(field)
+      .withWidth('100%')
+      .withReadonly(true)
     hideCheckbox.onChange((value: boolean) => {
       field.hidden = value
     })
@@ -259,11 +257,13 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
     _factory.popContainer()
     _factory.createRowContainer()
     const radio1 = _factory.createFieldRadio('radioValue', 'Radio 1')
-    radio1.id = 'radio1'
+      .withId('radio1')
     const radio2 = _factory.createFieldRadio('radioValue', 'Radio 2')
-    radio2.id = 'radio2'
+      .withId('radio2')
     _factory.popContainer()
     const fieldTextValue = _factory.createFieldText('Field checkbox value')
+      .withWidth('100%')
+      .withReadonly(true)
     const updateValue = (radioId: string, builder: UiBuilder) => {
       if (radioId === builder.id) {
         fieldTextValue.value = radioId
@@ -271,8 +271,6 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
     }
     radio1.onChange(updateValue)
     radio2.onChange(updateValue)
-    fieldTextValue.width = '100%'
-    fieldTextValue.readonly = true
     hideCheckbox.onChange((value: boolean) => {
       radio1.hidden = value
       radio2.hidden = value
@@ -301,7 +299,7 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
         const clickCount = _factory.getModelValue('default', 'buttonDemo')
         _factory.updateModelValue('default', 'buttonDemo', clickCount + 1)
       })
-    button.id = 'buttonDemo'
+      .withId('buttonDemo')
     _factory.updateModelValue('default', 'buttonDemo', 0)
     _factory.createButton("Transparent button", "transparent")
     _factory.createButton("Outline button", "outline")
@@ -328,7 +326,7 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
     componentHeading("H5 Heading", "h5")
     componentHeading("H6 Heading", "h6")
     componentHeading("Dynamic Heading '{{default.headingUpdater}}'")
-    _factory.createFieldText('Update heading').id = 'headingUpdater'
+    _factory.createFieldText('Update heading').withId('headingUpdater')
   }
 
   const textDemo = () => {
@@ -419,7 +417,7 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
     const hideCheckbox = _factory.createFieldCheckbox('Hide card container', 'right')
     _factory.popContainer()
     const comp = _factory.createCardContainer()
-    comp.heading = "Card container heading"
+      .withHeading("Card container heading")
     _factory.createParagraph(`
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
 Proin cursus magna urna, vel pulvinar elit ornare eu. Pellentesque habitant morbi
@@ -441,10 +439,10 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
     const hideCheckbox = _factory.createFieldCheckbox('Hide table', 'right')
     _factory.popContainer()
     const table = _factory.createTable()
-    table.columns = [
-      {name: "id", heading: "Look ID"},
-      {name: "title", heading: "Look Title"},
-    ]
+      .withColumns([
+        {name: "id", heading: "Look ID"},
+        {name: "title", heading: "Look Title"},
+      ])
     _core40SDK.all_looks()
       .then(result => {
         if (result.ok) {
