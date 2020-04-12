@@ -443,13 +443,18 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
         {name: "id", heading: "Look ID"},
         {name: "title", heading: "Look Title"},
       ])
-    _core40SDK.all_looks()
-      .then(result => {
-        if (result.ok) {
-          _factory.updateModelValue('default', table.id, result.value)
-        } else {
-          banner.error = "Error retrieving looks"
-        }
+      .on('activate', () => {
+        _core40SDK.all_looks()
+        .then(result => {
+          if (result.ok) {
+            _factory.updateModelValue('default', table.id, result.value)
+          } else {
+            banner.error = "Error retrieving looks"
+          }
+        })
+      })
+      .on('deactivate', () => {
+        _factory.updateModelValue('default', table.id, undefined)
       })
     hideCheckbox.onChange((value: boolean) => {
       table.hidden = value
