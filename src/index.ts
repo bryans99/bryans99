@@ -31,7 +31,7 @@ import {
   BannerBuilder,
   ButtonBuilder,
   UiBuilder,
-  CardContainerBuilder,
+  ChoiceContainerBuilder,
 } from '@looker/extension-sdk'
 import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
 
@@ -130,11 +130,11 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
     sidebar.items = []
     sidebar.props = { minWidth: '225px' }
     sidebar.onSelect(onSidebarItemSelect)
-    const cardContainer = _factory.createCardContainer()
-    cardContainer.id = 'demoCardContainer'
+    const choiceContainer = _factory.createChoiceContainer()
+    choiceContainer.id = 'demoChoiceContainer'
     const validItems: string[] = []
     demos.forEach(demo => {
-      const demoCtr = cardContainer.createColumnContainer()
+      const demoCtr = choiceContainer.createColumnContainer()
       demoCtr.id = demo.ctrId
       componentHeading(demo.label)
       demo.demoFunction()
@@ -459,8 +459,8 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
   }
 
   const onSidebarItemSelect = (itemId: string) => {
-    const cardContainer = _factory.getBuilder('demoCardContainer') as CardContainerBuilder
-    cardContainer.active = itemId
+    const choiceContainer = _factory.getBuilder('demoChoiceContainer') as ChoiceContainerBuilder
+    choiceContainer.active = itemId
     _extensionSdk.clientRouteChanged('/' + itemId)
   }
 
