@@ -112,15 +112,15 @@ import { Looker40SDK } from '@looker/sdk/dist/sdk/4.0/methods'
       },
       {
         icon: 'Flag',
-        label: 'Card demo',
-        demoFunction: cardDemo,
-        ctrId: 'card_demo',
+        label: 'Card container demo',
+        demoFunction: cardContainerDemo,
+        ctrId: 'card_container_demo',
       },
       {
         icon: 'Flag',
         label: 'Table demo',
         demoFunction: tableDemo,
-        ctrId: 'table _demo',
+        ctrId: 'table_demo',
       },
     ]
 
@@ -414,12 +414,12 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
     _factory.createFieldText('Update markdown').id = 'markdownUpdater'
   }
 
-  const cardDemo = () => {
+  const cardContainerDemo = () => {
     _factory.createRowContainer()
-    const hideCheckbox = _factory.createFieldCheckbox('Hide card', 'right')
+    const hideCheckbox = _factory.createFieldCheckbox('Hide card container', 'right')
     _factory.popContainer()
-    const comp = _factory.createCard()
-    comp.heading = "Card heading"
+    const comp = _factory.createCardContainer()
+    comp.heading = "Card container heading"
     _factory.createParagraph(`
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet nulla tellus.
 Proin cursus magna urna, vel pulvinar elit ornare eu. Pellentesque habitant morbi
@@ -433,7 +433,7 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
       hideCheckbox.onChange((value: boolean) => {
         comp.hidden = value
       })
-    }
+  }
 
   const tableDemo = () => {
     const banner = _factory.createBanner()
