@@ -460,17 +460,23 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
         {name: "title", heading: "Look Title"},
       ])
       .on('activate', () => {
+        banner.clearMessage()
         _core40SDK.all_looks()
-        .then(result => {
-          if (result.ok) {
-            _factory.updateModelValue('default', table.id, result.value)
-          } else {
-            banner.error = "Error retrieving looks"
+          .then(result => {
+            if (result.ok) {
+              _factory.updateModelValue('default', table.id, result.value)
+            } else {
+              banner.error = "Error retrieving looks"
+              _factory.updateModelValue('default', table.id, [])
+            }
+          }).catch((err) => {
+            console.error(err)
+            banner.error = "Unexpected error retrieving looks"
             _factory.updateModelValue('default', table.id, [])
-          }
-        })
+      })
       })
       .on('deactivate', () => {
+        banner.clearMessage()
         _factory.updateModelValue('default', table.id, [])
         _factory.updateModelValue('default', 'look_table', [])
       })
@@ -489,6 +495,10 @@ molestie lobortis. Nam vel fringilla leo, a vestibulum nulla.
                   banner.error = `Error retrieving look ${ lookId}`
                   _factory.updateModelValue('default', 'look_table', [])
                 }
+              }).catch((err) => {
+                console.error(err)
+                banner.error = `Unexpected error retrieving look ${ lookId}`
+                _factory.updateModelValue('default', 'look_table', [])
               })
           }
         }
